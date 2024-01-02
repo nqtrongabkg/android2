@@ -46,10 +46,6 @@ export default function Home({ navigation }) {
         fetchData(selectedCategory);
     }, [selectedCategory]);
 
-    // if (isLoading) {
-    //     return <Text>Loading...</Text>;
-    // }
-
     if (error) {
         return <Text>Error: {error.message}</Text>;
     }
@@ -68,6 +64,11 @@ export default function Home({ navigation }) {
         <TouchableOpacity style={styles.gridItemContainer} onPress={() => navigation.navigate('ProductDetail', { itemId: item.id })}>
             <View style={styles.gridItemImageContainer}>
                 <Image source={{ uri: item.image }} style={styles.gridItemImage} resizeMode="contain" />
+                {item.id && (
+                    <View style={styles.discountBadge}>
+                        <Text style={styles.discountText}>-{item.id}%</Text>
+                    </View>
+                )}
             </View>
             <Text style={styles.gridItemTitle}>{truncateName(item.title, 2)}</Text>
             <View style={styles.gridItemPriceContainer}>
@@ -87,7 +88,7 @@ export default function Home({ navigation }) {
                 contentContainerStyle={styles.categoriesScrollViewContent}
             >
                 <TouchableOpacity
-                    style={[styles.category, selectedCategory === 'all' && styles.selectedCategory]}
+                    style={[styles.category, selectedCategory === 'categories' && styles.selectedCategory]}
                     onPress={() => setSelectedCategory('categories')}
                 >
                     <Text style={styles.categoryText}>All</Text>
@@ -124,16 +125,18 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     categoriesScrollViewContent: {
-        paddingHorizontal: 10, // Padding on the sides
-        alignItems: 'center', // Align items in the center vertically
+        paddingHorizontal: 10,
+        alignItems: 'center',
     },
     category: {
-        padding: 10,
-        marginHorizontal: 5,
+        paddingVertical: 8,
+        paddingHorizontal: 10,
         backgroundColor: '#ddd',
-        borderRadius: 20,
+        borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
+        marginHorizontal: 5,
+        height: 40,
     },
     selectedCategory: {
         backgroundColor: 'blue',
@@ -171,7 +174,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'center',
-        maxHeight: 40, // Chiều cao tối đa cho 2 dòng
+        maxHeight: 40,
         overflow: 'hidden',
     },
     gridItemPriceContainer: {
@@ -200,4 +203,22 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
     },
+    discountBadge: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        backgroundColor: 'red',
+        borderTopRightRadius: 5, 
+        borderBottomLeftRadius: 5, 
+        width: 50, 
+        height: 25, 
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    discountText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+
+
 });
